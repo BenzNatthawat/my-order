@@ -1,0 +1,52 @@
+version: "3.8"
+services:
+  database:
+    image: postgres:14.1-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: p0$tGrest
+    ports:
+      - '5432:5432'
+    networks:
+      - post-network
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -U postgres
+  backend:
+    image: backend-post
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    build:
+      context: backend-post
+      dockerfile: ./Dockerfile
+    entrypoint: /app/docker/entrypoint.sh
+    env_file:
+      - ./backend-post/.env.docker
+    networks:
+      - post-network
+    depends_on:
+      database:
+        condition: service_healthy
+  frontend:
+    image: frontend-post
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    environment:
+      - BASE_URL=backend
+    build:
+      context: frontend-post
+      dockerfile: ./Dockerfile
+    networks:
+      - post-network
+    depends_on:
+      - backend
+networks:
+  post-network:
+    driver: bridge
+volumes:
+  db:
+    driver: local

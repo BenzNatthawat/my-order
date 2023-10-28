@@ -1,0 +1,30 @@
+<div class="container mt-3">
+  <div class="content" role="main">
+    <h2>{{ title }}</h2>
+    <div *ngIf="loading; else list">
+      <p>Loading...</p>
+    </div>
+
+    <ng-template #list>
+      <div *ngIf="feedback.message" class="alert alert-{{ feedback.type }}">{{ feedback.message }}</div>
+
+      <div class="container">
+        <div class="row">
+
+          <div *ngFor="let poster of posters" class="col-4 p-2">
+            <div class="card">
+              <img class="img-poster" src="assets/images/{{ poster?.image }}" [alt]="poster?.image"
+                (error)="onImgError($event)">
+              <div class="card-body">
+                <h5 class="card-title">{{ poster.title }}</h5>
+                <a (click)="route(poster.id)" class="btn btn-primary">อ่านเพิ่มเติม</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </ng-template>
+  </div>
+</div>

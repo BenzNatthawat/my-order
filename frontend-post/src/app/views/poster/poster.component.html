@@ -1,0 +1,122 @@
+<div class="container mt-3">
+  <div class="content" role="main">
+    <div *ngIf="loading; else list">
+      <p>Loading...</p>
+    </div>
+
+
+    <ng-template #list>
+      <div *ngIf="feedback.message" class="alert alert-{{ feedback.type }}">{{ feedback.message }}</div>
+
+      <div class="row justify-content-md-center">
+        <div class="col-4">
+          <h2 class="text-center">{{ poster?.title }}</h2>
+        </div>
+      </div>
+      <div class="row justify-content-md-center my-3">
+        <div class="col-4">
+          <img class="img-post" src="assets/images/{{ poster?.image }}" [alt]="poster?.image"
+            (error)="onImgError($event)">
+        </div>
+      </div>
+
+      <div class="container">
+
+        <!-- show posts for array -->
+        <div *ngFor="let post of posts; let i = index" class="row justify-content-md-center">
+          <div class="col-8 mb-3">
+            <div *ngIf=" !post.edit" class="card">
+              <div class="card-body">
+                <h5 class="card-title">{{ post?.name }}</h5>
+                <p class="card-text">{{ post?.post }}</p>
+                <a (click)="handleEdit(post.id, i)" class="btn btn-sm btn-link mx-1">Edit</a>
+                <button (click)="delete(post.id, i)" class="btn btn-sm btn-danger mx-1">Delete</button>
+              </div>
+            </div>
+            <div *ngIf="post.edit" class="card">
+              <div class="card-body">
+
+                <form [formGroup]="form" (ngSubmit)="handleSubmitUpdate(i)">
+                  <div class="form-row">
+
+                    <div class="col mb-3 form-group">
+                      <label for="name">Name</label>
+                      <input type="text" class="form-control" id="name" formControlName="name"
+                        [ngClass]="{ 'is-invalid': fEdit['name'].errors }">
+                      <div *ngIf="fEdit['name'].errors" class="invalid-feedback">
+                        <div *ngIf="fEdit['name'].errors['required']">name is required</div>
+                      </div>
+                    </div>
+
+                    <div class="col mb-3 form-group">
+                      <label for="post">Post</label>
+                      <textarea class="form-control" id="post" rows="3" formControlName="post"></textarea>
+                    </div>
+
+                  </div>
+                  <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- check empty posts array -->
+        <div class="row justify-content-md-center my-2">
+          <div *ngIf="posts.length === 0" class="row justify-content-md-center col-8">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="text-center">Empty</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- create post form -->
+        <div class="row justify-content-md-center my-2">
+          <div class="col-8">
+
+            <div class="card">
+              <div class="card-body">
+
+                <form [formGroup]="formAdd" (ngSubmit)="handleSubmitCreate()" class="p-4">
+                  <div class="form-row">
+
+                    <div class="col mb-3 form-group">
+                      <label for="name">Name</label>
+                      <input type="text" class="form-control" id="name" formControlName="name"
+                        [ngClass]="{ 'is-invalid': fAdd['name'].errors && (fAdd['name'].dirty || fAdd['name'].touched) }">
+                      <div *ngIf="fAdd['name'].errors" class="invalid-feedback">
+                        <div *ngIf="fAdd['name'].errors['required']">name is required</div>
+                      </div>
+                    </div>
+
+                    <div class="col mb-3 form-group">
+                      <label for="post">Post</label>
+                      <textarea class="form-control" id="post" rows="3" formControlName="post"
+                        [ngClass]="{ 'is-invalid': fAdd['post'].errors && (fAdd['post'].dirty || fAdd['post'].touched) }"></textarea>
+                    </div>
+
+                    <div class="col mb-3 form-group">
+                      <label for="score">Score</label>
+                      <input type="number" class="form-control" id="score" formControlName="score" autocomplete="off"
+                        [ngClass]="{ 'is-invalid': fAdd['score'].errors && (fAdd['score'].dirty || fAdd['score'].touched) }">
+                    </div>
+
+                  </div>
+                  <button type="submit" class="btn btn-sm btn-primary mx-1">Save</button>
+                  <button (click)="reset()" class="btn btn-sm btn-light mx-1">Clear</button>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </ng-template>
+  </div>
+</div>

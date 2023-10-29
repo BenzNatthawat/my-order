@@ -30,8 +30,4 @@ export class PostersComponent {
   route(id: number | null): void {
     this.router.navigate([`/poster/${id}`]);
   }
-
-  onImgError(event: Event) {
-    (event.target as HTMLImageElement).src = './assets/images/image-error.png'
-  }
 }

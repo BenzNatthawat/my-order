@@ -9,6 +9,8 @@ import { PosterComponent } from './views/poster/poster.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NavbarComponent } from './component/navbar/navbar.component';
 import { FooterComponent } from './component/footer/footer.component';
+import { ImagesComponent } from './component/images/images.component';
+import { NgOptimizedImage } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -17,13 +19,15 @@ import { FooterComponent } from './component/footer/footer.component';
     PosterComponent,
     NavbarComponent,
     FooterComponent,
+    ImagesComponent,
   ],
   imports: [
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgOptimizedImage
   ],
   providers: [],
   bootstrap: [AppComponent]

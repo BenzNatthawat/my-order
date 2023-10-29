@@ -13,8 +13,9 @@
 
           <div *ngFor="let poster of posters" class="col-4 p-2">
             <div class="card">
-              <img class="img-poster" src="assets/images/{{ poster?.image }}" [alt]="poster?.image"
-                (error)="onImgError($event)">
+
+              <app-images src="assets/images/{{ poster?.image }}"></app-images>
+              
               <div class="card-body">
                 <h5 class="card-title">{{ poster.title }}</h5>
                 <a (click)="route(poster.id)" class="btn btn-primary">อ่านเพิ่มเติม</a>

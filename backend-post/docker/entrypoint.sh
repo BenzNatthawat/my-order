@@ -1,8 +1,9 @@
-# !/bin/sh
-echo '************ Starting get ready!!! ************'
-echo '*************** create database ***************'
+#!/bin/sh
+
+echo "************ Starting get ready!!! ************"
+echo "*************** create database ***************"
 npm run db:all
-echo '******************** sleep ********************'
+echo "******************** sleep ********************"
 sleep 10
-echo '******************** start ********************'
+echo "******************** start ********************"
 npm run start:prod

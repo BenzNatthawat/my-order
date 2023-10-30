@@ -10,7 +10,7 @@
 
       <div class="row justify-content-md-center">
         <div class="col-4">
-          <h2 class="text-center">{{ poster?.title }}</h2>
+          <h2 class="title text-center">{{ poster?.title }}</h2>
         </div>
       </div>
       <div class="row justify-content-md-center my-3">
@@ -21,6 +21,16 @@
       </div>
 
       <div class="container">
+
+        <div class="row justify-content-md-center my-3">
+          <div class="col-4">
+            <p class="text-center score">
+              <span
+                class="score-count">{{ score.count > 0 ? calculatorScore(score.total, score.count) : '0' }}</span><span
+                class="score-total">/10</span>
+            </p>
+          </div>
+        </div>
 
         <!-- show posts for array -->
         <div *ngFor="let post of posts; let i = index" class="row justify-content-md-center">
@@ -101,7 +111,8 @@
 
                     <div class="col mb-3 form-group">
                       <label for="score">Score</label>
-                      <input type="number" class="form-control" id="score" formControlName="score" autocomplete="off"
+                      <input type="number" class="form-control" id="score" max="10" min="0" formControlName="score"
+                        autocomplete="off"
                         [ngClass]="{ 'is-invalid': fAdd['score'].errors && (fAdd['score'].dirty || fAdd['score'].touched) }">
                     </div>
 

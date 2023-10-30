@@ -9,7 +9,7 @@ import { PosterService } from 'src/app/service/poster.service';
   styleUrls: ['./posters.component.css']
 })
 export class PostersComponent {
-  title = 'frontend-post';
+  title = 'Poster List';
   posters?: Poster[];
   loading = true;
   feedback: any = {};

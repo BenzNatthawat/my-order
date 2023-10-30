@@ -5,6 +5,7 @@ import { Post } from 'src/app/model/post';
 import { PostService } from 'src/app/service/post.service';
 import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, AbstractControl, Validators } from '@angular/forms';
+import { Score } from 'src/app/model/score';
 
 @Component({
   selector: 'app-poster',
@@ -20,7 +21,13 @@ export class PosterComponent {
   loading = true;
   poster?: Poster;
   posts: Post[] = [];
+  score: Score = {
+    posterId: 0,
+    count: 0,
+    total: 0,
+  };
   feedback: any = {};
+  calScore: number = 0;
 
   formAdd: FormGroup = new FormGroup({
     name: new FormControl("", [Validators.required, Validators.minLength(3)]),
@@ -52,6 +59,11 @@ export class PosterComponent {
 
     this.postService.getAll(this.id).subscribe((posts: Post[]) => {
       this.posts = posts;
+      this.loading = false;
+    });
+
+    this.postService.score(this.id).subscribe((score: Score) => {
+      this.score = score;
       this.loading = false;
     });
   }
@@ -122,5 +134,20 @@ export class PosterComponent {
 
   onImgError(event: Event) {
     (event.target as HTMLImageElement).src = './assets/images/image-error.png'
+  }
+
+  calculatorScore(totalScore: number, countPost: number): number {
+    if (countPost <= 0) {
+      return 0
+    } else {
+      const score = totalScore / countPost
+      if (score > 10) {
+        return 10
+      } else if (score < 0) {
+        return 0
+      } else {
+        return score
+      }
+    }
   }
 }

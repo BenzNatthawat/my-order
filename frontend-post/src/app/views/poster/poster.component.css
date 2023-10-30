@@ -1,7 +1,18 @@
 .img-post {
-    width: auto;
-    height: 360px;
-    object-fit: contain;
-    margin: 8px;
-  }
-  
+  width: auto;
+  height: 360px;
+  object-fit: contain;
+  margin: 8px;
+}
+
+.score {
+  line-height: 0.2;
+}
+
+.score-count {
+  font-size: 3em;
+}
+
+.score-total {
+  font-size: 1.2em;
+}

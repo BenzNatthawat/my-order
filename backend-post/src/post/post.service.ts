@@ -2,6 +2,18 @@ import { Injectable, Inject } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from 'src/entities/post.entity';
+import sequelize from 'sequelize';
+import { type } from 'os';
+
+type Score = {
+  posterId: Number
+  total: Number
+}
+
+type Count = {
+  posterId: Number
+  count: Number
+}
 
 @Injectable()
 export class PostService {
@@ -34,6 +46,30 @@ export class PostService {
       }
     });
     return result
+  }
+
+  async findCountByPoster(id: number): Promise<Count> {
+    const result: Count[] = await this.postRepository.findAll<any>({
+      attributes: ['posterId', [sequelize.fn('count', sequelize.col('poster_id')), 'count']],
+      where: {
+        posterId: id
+      },
+      group: ['posterId'],
+      raw: true,
+    });
+    return result[0]
+  }
+
+  async findScoreByPoster(id: number): Promise<Score> {
+    const result: Score[] = await this.postRepository.findAll<any>({
+      attributes: ['posterId', [sequelize.fn('sum', sequelize.col('score')), 'total']],
+      where: {
+        posterId: id
+      },
+      group: ['posterId'],
+      raw: true,
+    });
+    return result[0]
   }
 
   async update(id: number, updatePostDto: UpdatePostDto): Promise<Post> {

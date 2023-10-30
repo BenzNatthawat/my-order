@@ -17,6 +17,17 @@ export class PostController {
     return this.postService.findAll(id);
   }
 
+  @Get('score/:id')
+  async findScoreByPoster(@Param('id') id: number) {
+    const count = await this.postService.findCountByPoster(id);
+    console.log(count)
+    const score = await this.postService.findScoreByPoster(id);
+    return {
+      count: Number(count.count),
+      ...score
+    }
+  }
+
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.postService.findOne(id);

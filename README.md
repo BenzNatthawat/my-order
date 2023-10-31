@@ -24,3 +24,15 @@ $ docker-compose up -d
 
 This project frontend start docker `http://localhost:80` \
 this project backend start docker `http://localhost:8000/api`
+
+## Test Project Before Build
+### Test frontend
+```bash
+$ cd frontend-post
+$ npm run test
+```
+### Test backend
+```bash
+$ cd backend-post
+$ npm run test
+```

@@ -1,7 +1,7 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { Post } from 'src/entities/post.entity';
+import { PostEntity } from 'src/entities/post.entity';
 import sequelize from 'sequelize';
 import { type } from 'os';
 
@@ -19,19 +19,19 @@ type Count = {
 export class PostService {
   constructor(
     @Inject('POST_REPOSITORY')
-    private readonly postRepository: typeof Post,
+    private readonly postRepository: typeof PostEntity,
   ) { }
 
-  async create(posterId: number, createPostDto: CreatePostDto): Promise<Post> {
-    const result: Post = await this.postRepository.create<Post>({
+  async create(posterId: number, createPostDto: CreatePostDto): Promise<PostEntity> {
+    const result: PostEntity = await this.postRepository.create<PostEntity>({
       ...createPostDto,
       posterId: posterId
     })
     return result
   }
 
-  async findAll(id: number): Promise<Post[]> {
-    const results: Post[] = await this.postRepository.findAll<Post>({
+  async findAll(id: number): Promise<PostEntity[]> {
+    const results: PostEntity[] = await this.postRepository.findAll<PostEntity>({
       where: {
         posterId: id
       }
@@ -39,8 +39,8 @@ export class PostService {
     return results
   }
 
-  async findOne(id: number): Promise<Post> {
-    const result: Post = await this.postRepository.findOne<Post>({
+  async findOne(id: number): Promise<PostEntity> {
+    const result: PostEntity = await this.postRepository.findOne<PostEntity>({
       where: {
         id: id
       }
@@ -72,8 +72,16 @@ export class PostService {
     return result[0]
   }
 
-  async update(id: number, updatePostDto: UpdatePostDto): Promise<Post> {
-    const result: [number, Post[]] = await this.postRepository.update<Post>({
+  async update(id: number, updatePostDto: UpdatePostDto): Promise<any> {
+    const findPost: PostEntity = await this.postRepository.findOne<PostEntity>({
+      where: {
+        id: id
+      }
+    });
+    if (!findPost) {
+      throw new NotFoundException('Post not fount')
+    }
+    const result: [number, PostEntity[]] = await this.postRepository.update<PostEntity>({
       ...updatePostDto,
     }, {
       where: { id: id },
@@ -83,7 +91,15 @@ export class PostService {
   }
 
   async remove(id: number): Promise<number> {
-    const result: number = await this.postRepository.destroy<Post>({
+    const findPost: PostEntity = await this.postRepository.findOne<PostEntity>({
+      where: {
+        id: id
+      }
+    });
+    if (!findPost) {
+      throw new NotFoundException('Post not fount')
+    }
+    const result: number = await this.postRepository.destroy<PostEntity>({
       where: { id: id }
     })
     return result

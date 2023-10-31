@@ -1,12 +1,13 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { Poster } from 'src/app/model/poster';
 import { PosterService } from 'src/app/service/poster.service';
 import { Post } from 'src/app/model/post';
 import { PostService } from 'src/app/service/post.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, AbstractControl, Validators } from '@angular/forms';
 import { Score } from 'src/app/model/score';
-
+import { delay } from 'src/app/utils/delay';
+import { async } from '@angular/core/testing';
 @Component({
   selector: 'app-poster',
   templateUrl: './poster.component.html',
@@ -26,7 +27,7 @@ export class PosterComponent {
     count: 0,
     total: 0,
   };
-  feedback: any = {};
+  feedback: string = "";
   calScore: number = 0;
 
   formAdd: FormGroup = new FormGroup({
@@ -44,7 +45,8 @@ export class PosterComponent {
   constructor(
     private posterService: PosterService,
     private postService: PostService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -54,7 +56,10 @@ export class PosterComponent {
     this.posterService.getOne(this.id).subscribe((poster: Poster) => {
       this.poster = poster;
       this.loading = false;
-      this.feedback = {};
+    }, async (error: Error) => {
+      this.feedback = `ไม่สามารถแสดง Poster id:${this.id}`;
+      await delay(2000)
+      this.router.navigate([`/`]);
     });
 
     this.postService.getAll(this.id).subscribe((posts: Post[]) => {
@@ -95,9 +100,12 @@ export class PosterComponent {
       return;
     }
     const id: number = Number(this.id)
-    this.postService.create(id, this.formAdd.value).subscribe((post: Post) => {
+    this.postService.create(id, this.formAdd.value).subscribe(async (post: Post) => {
       this.formAdd.reset();
       this.posts?.push(post)
+      this.feedback = `เพิ่ม post สำเร็จ`;
+      await delay(3000)
+      this.feedback = ``;
     });
   }
 
@@ -125,8 +133,11 @@ export class PosterComponent {
     if (typeof this.posts === 'object' && this.posts.length > 0) {
       if (typeof this.posts[index].id === 'number') {
         const id: number = Number(this.posts[index].id)
-        this.postService.delete(id).subscribe((post: Post) => {
+        this.postService.delete(id).subscribe(async (post: Post) => {
           this.posts?.splice(index, 1)
+          this.feedback = `ลบ post id:${id} สำเร็จ`;
+          await delay(3000)
+          this.feedback = ``;
         });
       }
     }
@@ -140,7 +151,7 @@ export class PosterComponent {
     if (countPost <= 0) {
       return 0
     } else {
-      const score = totalScore / countPost
+      const score = Number((totalScore / countPost).toFixed(1))
       if (score > 10) {
         return 10
       } else if (score < 0) {

@@ -1,8 +1,8 @@
-import { Post } from "src/entities/post.entity";
+import { PostEntity } from "src/entities/post.entity";
 
 export const postProviders = [
   {
     provide: 'POST_REPOSITORY',
-    useValue: Post,
+    useValue: PostEntity,
   },
 ];

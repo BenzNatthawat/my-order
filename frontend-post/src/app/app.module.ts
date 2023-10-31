@@ -11,6 +11,7 @@ import { NavbarComponent } from './component/navbar/navbar.component';
 import { FooterComponent } from './component/footer/footer.component';
 import { ImagesComponent } from './component/images/images.component';
 import { NgOptimizedImage } from '@angular/common';
+import { ToastsComponent } from './component/toasts/toasts.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { NgOptimizedImage } from '@angular/common';
     NavbarComponent,
     FooterComponent,
     ImagesComponent,
+    ToastsComponent,
   ],
   imports: [
     HttpClientModule,

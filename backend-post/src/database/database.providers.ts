@@ -1,6 +1,6 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Sequelize } from 'sequelize-typescript';
-import { Post } from 'src/entities/post.entity';
+import { PostEntity } from 'src/entities/post.entity';
 import { Poster } from 'src/entities/poster.entity';
 
 export const databaseProviders = [
@@ -9,7 +9,7 @@ export const databaseProviders = [
         imports: [ConfigModule],
         useFactory: async (config: ConfigService) => {
             const sequelize = new Sequelize(config.get('database'));
-            sequelize.addModels([Post, Poster]);
+            sequelize.addModels([PostEntity, Poster]);
             await sequelize
                 .authenticate()
                 .then(() => {

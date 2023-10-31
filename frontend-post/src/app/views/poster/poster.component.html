@@ -6,7 +6,6 @@
 
 
     <ng-template #list>
-      <div *ngIf="feedback.message" class="alert alert-{{ feedback.type }}">{{ feedback.message }}</div>
 
       <div class="row justify-content-md-center">
         <div class="col-4">
@@ -128,6 +127,9 @@
 
       </div>
 
+
     </ng-template>
   </div>
 </div>
+
+<app-toasts [show]="feedback ? true : false" [message]="feedback"></app-toasts>

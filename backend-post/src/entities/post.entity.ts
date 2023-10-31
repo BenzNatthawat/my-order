@@ -8,7 +8,7 @@ import { Poster } from "./poster.entity";
   paranoid: true,
 })
 
-export class Post extends Model {
+export class PostEntity extends Model {
   @PrimaryKey
   @AutoIncrement
   @AllowNull(false)

@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Poster } from 'src/entities/poster.entity';
 
 @Injectable()
@@ -19,6 +19,11 @@ export class PosterService {
         id: id
       }
     });
-    return result
+    if (result) {
+      return result
+    }
+    else {
+      throw new NotFoundException('Poster not fount')
+    }
   }
 }

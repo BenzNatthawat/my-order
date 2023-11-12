@@ -1,4 +1,4 @@
-import { PostEntity } from "src/entities/post.entity";
+import { PostEntity } from "../entities/post.entity";
 
 export const postProviders = [
   {

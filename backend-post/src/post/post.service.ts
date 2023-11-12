@@ -45,6 +45,9 @@ export class PostService {
         id: id
       }
     });
+    if (!result) {
+      throw new NotFoundException('Post not found');
+    }
     return result
   }
 
